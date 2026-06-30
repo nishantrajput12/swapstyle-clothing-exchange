@@ -42,9 +42,13 @@ router.get('/', async (req, res) => {
         const authHeader = req.headers.authorization || '';
         const tok = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
         if (tok) {
-          const decoded = jwt.verify(tok, process.env.JWT_SECRET || 'clothing-swap-secret-2024');
-          query += ` AND ci.user_id = $${pc}`;
-          params.push(decoded.id);
+          try {
+            const decoded = jwt.verify(tok, process.env.JWT_SECRET || 'clothing-swap-secret-2024');
+            query += ` AND ci.user_id = $${pc}`;
+            params.push(decoded.id);
+          } catch (e) {
+            return res.status(401).json({ error: 'Invalid token' });
+          }
         } else {
           return res.json([]);
         }

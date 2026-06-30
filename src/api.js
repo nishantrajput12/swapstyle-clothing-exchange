@@ -8,6 +8,16 @@ async function req(path, opts = {}) {
   const headers = { 'Content-Type': 'application/json', ...(opts.headers || {}) };
   if (opts.auth) headers.Authorization = `Bearer ${token()}`;
   const res = await fetch(`${BASE}${path}`, { ...opts, headers });
+
+  // Auto-clear stale/invalid tokens and force re-login
+  if (res.status === 401) {
+    clearAuth();
+    if (window.location.pathname !== '/login') {
+      window.location.href = '/login';
+    }
+    throw new Error('Session expired. Please login again.');
+  }
+
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
     throw new Error(data.error || `Request failed (${res.status})`);
