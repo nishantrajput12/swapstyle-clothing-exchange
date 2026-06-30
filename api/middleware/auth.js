@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const SECRET = process.env.JWT_SECRET || 'clothing-swap-secret-2024';
+const SECRET = process.env.JWT_SECRET || 'clothing-swap-secret-2024-v2';
 
 export function authRequired(req, res, next) {
   const header = req.headers.authorization || '';
