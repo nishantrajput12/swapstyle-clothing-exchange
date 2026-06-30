@@ -1,7 +1,10 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import sql from '../db.js';
 import { signToken } from '../middleware/auth.js';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'clothing-swap-secret-2024';
 
 const router = Router();
 
@@ -73,8 +76,7 @@ router.get('/me', async (req, res) => {
     const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
     if (!token) return res.status(401).json({ error: 'Not authenticated' });
 
-    const jwt = await import('jsonwebtoken');
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'clothing-swap-secret-2024');
+    const decoded = jwt.verify(token, JWT_SECRET);
 
     const users = await sql`
       SELECT id, username, email, full_name, location, phone, bio, profile_image, is_admin, created_at

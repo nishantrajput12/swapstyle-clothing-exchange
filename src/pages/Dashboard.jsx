@@ -12,9 +12,18 @@ export default function Dashboard() {
   useEffect(() => {
     async function load() {
       try {
-        const [u, i, s] = await Promise.all([api.me(), api.clothing({ user_id: 'me' }), api.swapStats()]);
-        setUser(u); setItems(i); setStats(s);
-      } catch (e) { console.error(e); } finally { setLoading(false); }
+        const u = await api.me();
+        setUser(u);
+      } catch (e) { console.error('Failed to load user:', e); }
+      try {
+        const i = await api.clothing({ user_id: 'me' });
+        setItems(i);
+      } catch (e) { console.error('Failed to load items:', e); }
+      try {
+        const s = await api.swapStats();
+        setStats(s);
+      } catch (e) { console.error('Failed to load stats:', e); }
+      setLoading(false);
     }
     load();
   }, []);
