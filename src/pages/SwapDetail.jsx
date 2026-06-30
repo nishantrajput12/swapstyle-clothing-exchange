@@ -14,9 +14,14 @@ export default function SwapDetail() {
   useEffect(() => {
     async function load() {
       try {
-        const [s, m] = await Promise.all([api.swap(id), api.messages(id)]);
-        setSwap(s); setMessages(m);
-      } catch (e) { console.error(e); } finally { setLoading(false); }
+        const s = await api.swap(id);
+        setSwap(s);
+      } catch (e) { console.error('Failed to load swap:', e); }
+      try {
+        const m = await api.messages(id);
+        setMessages(m);
+      } catch (e) { console.error('Failed to load messages:', e); }
+      setLoading(false);
     }
     load();
   }, [id]);
