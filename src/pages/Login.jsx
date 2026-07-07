@@ -1,51 +1,78 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { api, setToken, setUser } from '../api';
+import { useAuth } from '../context/AuthContext';
+import { HiMail, HiLockClosed, HiArrowLeft } from 'react-icons/hi';
 
 export default function Login() {
+  const { login } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ username: '', password: '' });
-  const [err, setErr] = useState('');
+  const [form, setForm] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setErr(''); setLoading(true);
-    try {
-      const data = await api.login(form);
-      setToken(data.token);
-      setUser(data.user.id);
-      navigate('/dashboard');
-    } catch (e) { setErr(e.message); } finally { setLoading(false); }
-  }
+    setError('');
+    setLoading(true);
+    setTimeout(() => {
+      const result = login(form.email, form.password);
+      setLoading(false);
+      if (result.success) {
+        navigate('/dashboard');
+      } else {
+        setError(result.error);
+      }
+    }, 400);
+  };
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gradient-to-br from-primary-50 to-accent-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full">
-        <div className="bg-white rounded-xl shadow-xl p-8">
+        <Link to="/" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-8">
+          <HiArrowLeft /> Back to home
+        </Link>
+
+        <div className="card p-8">
           <div className="text-center mb-8">
-            <div className="inline-block bg-primary-100 p-3 rounded-full mb-4">
-              <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-            </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-            <p className="text-gray-600">Login to your account</p>
+            <h1 className="text-2xl font-bold text-gray-900 font-display">Welcome back</h1>
+            <p className="text-gray-500 mt-1">Log in to your SwapStyle account</p>
           </div>
-          {err && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">{err}</div>}
-          <form onSubmit={handleSubmit} className="space-y-5">
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm mb-5">{error}</div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">Username or Email</label>
-              <input type="text" required className="input" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} placeholder="Enter your username" />
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+              <div className="relative">
+                <HiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input type="email" required value={form.email} onChange={e => setForm({...form, email: e.target.value})} className="input-field pl-10" placeholder="you@example.com" />
+              </div>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">Password</label>
-              <input type="password" required className="input" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} placeholder="Enter your password" />
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+              <div className="relative">
+                <HiLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input type="password" required value={form.password} onChange={e => setForm({...form, password: e.target.value})} className="input-field pl-10" placeholder="Enter your password" />
+              </div>
             </div>
-            <button type="submit" disabled={loading} className="btn-primary w-full">{loading ? 'Logging in...' : 'Login'}</button>
+            <button type="submit" disabled={loading} className="btn-primary w-full py-3">
+              {loading ? 'Logging in...' : 'Log In'}
+            </button>
           </form>
-          <p className="mt-6 text-center text-gray-600">Don't have an account? <Link to="/register" className="text-primary-600 font-semibold hover:text-primary-700">Sign up</Link></p>
-        </div>
-        <div className="mt-4 bg-white rounded-lg shadow p-4 text-center">
-          <p className="text-sm text-gray-600 mb-2">Demo: <span className="font-mono font-semibold text-primary-600">priya_sharma</span> / <span className="font-mono font-semibold text-primary-600">password123</span></p>
+
+          <div className="mt-6 text-center text-sm text-gray-500">
+            Don't have an account? <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">Sign up</Link>
+          </div>
+
+          <div className="mt-6 p-4 bg-gray-50 rounded-xl">
+            <p className="text-xs text-gray-500 font-medium mb-2">Demo Accounts:</p>
+            <div className="space-y-1 text-xs text-gray-600">
+              <p><strong>User:</strong> priya@example.com / password123</p>
+              <p><strong>Admin:</strong> admin@swapstyle.com / admin123</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

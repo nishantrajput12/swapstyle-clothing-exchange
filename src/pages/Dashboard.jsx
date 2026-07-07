@@ -1,92 +1,111 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { api, clearAuth } from '../api';
+import { useAuth } from '../context/AuthContext';
+import { useApp } from '../context/AppContext';
 import ClothingCard from '../components/ClothingCard';
+import LocationMatcher from '../components/LocationMatcher';
+import SwapCard from '../components/SwapCard';
+import { HiPlus, HiShoppingBag, HiSwitchHorizontal, HiChat, HiClipboardList } from 'react-icons/hi';
 
 export default function Dashboard() {
-  const [user, setUser] = useState(null);
-  const [items, setItems] = useState([]);
-  const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const u = await api.me();
-        setUser(u);
-      } catch (e) { console.error('Failed to load user:', e); }
-      try {
-        const i = await api.clothing({ user_id: 'me' });
-        setItems(i);
-      } catch (e) { console.error('Failed to load items:', e); }
-      try {
-        const s = await api.swapStats();
-        setStats(s);
-      } catch (e) { console.error('Failed to load stats:', e); }
-      setLoading(false);
-    }
-    load();
-  }, []);
-
-  async function handleDelete(id) {
-    if (!confirm('Delete this item?')) return;
-    try { await api.deleteClothing(id); setItems(items.filter(i => i.id !== id)); } catch (e) { alert(e.message); }
-  }
-
-  if (loading) return <div className="max-w-7xl mx-auto px-4 py-8"><div className="animate-pulse h-32 bg-gray-200 rounded-xl" /></div>;
+  const { user } = useAuth();
+  const { getUserListings, getUserSwaps, getPendingSwaps, getChatPartners } = useApp();
+  const myListings = getUserListings(user.id);
+  const mySwaps = getUserSwaps(user.id);
+  const pendingSwaps = getPendingSwaps(user.id);
+  const chatPartners = getChatPartners(user.id);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="card p-6 mb-8">
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{user?.full_name}</h1>
-            <p className="text-gray-600">@{user?.username}</p>
-            <div className="flex gap-4 mt-4 text-sm text-gray-600">
-              <span>📍 {user?.location}</span>
-              {user?.phone && <span>📞 {user?.phone}</span>}
-            </div>
-            {user?.bio && <p className="mt-4 text-gray-700">{user.bio}</p>}
-          </div>
-          <button onClick={() => { clearAuth(); window.location.href = '/'; }} className="btn-outline">Logout</button>
+    <div className="page-container">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <h1 className="section-title">Welcome, {user.name.split(' ')[0]}</h1>
+          <p className="text-gray-500 mt-1">Manage your listings, swaps, and messages</p>
         </div>
+        <Link to="/listing/new" className="btn-primary flex items-center gap-2">
+          <HiPlus /> New Listing
+        </Link>
       </div>
-      {stats && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {[['Listings', items.length, 'text-primary-600'], ['Swaps Sent', stats.sent, 'text-accent-600'], ['Accepted', stats.accepted, 'text-blue-600'], ['Completed', stats.completed, 'text-green-600']].map(([l, v, c], i) => (
-            <div key={i} className="card p-6 text-center">
-              <div className={`text-3xl font-bold ${c}`}>{v}</div>
-              <div className="text-sm text-gray-600 mt-1">{l}</div>
-            </div>
-          ))}
-        </div>
-      )}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">My Listings</h2>
-          <Link to="/add" className="btn-primary">+ Add Item</Link>
-        </div>
-        {items.length === 0 ? (
-          <div className="card p-12 text-center"><div className="text-6xl mb-4">👕</div><h3 className="text-xl font-semibold mb-2">No items yet</h3><p className="text-gray-600 mb-4">Add your first item to start swapping</p><Link to="/add" className="btn-primary">Add Item</Link></div>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {items.map(i => (
-              <div key={i.id} className="relative group">
-                <ClothingCard item={i} />
-                <button onClick={() => handleDelete(i.id)} className="absolute top-2 right-2 bg-red-600 text-white px-3 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity">Delete</button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      <div className="grid md:grid-cols-3 gap-6">
-        {[['🔄', 'View Swaps', 'Manage swap requests', '/swaps'], ['🔍', 'Browse Items', 'Find items to swap', '/clothing'], ['➕', 'Add New Item', 'List a new item', '/add']].map(([ic, t, d, l], i) => (
-          <Link key={i} to={l} className="card p-6 hover:shadow-lg transition-shadow">
-            <div className="text-3xl mb-2">{ic}</div>
-            <h3 className="font-semibold text-lg mb-1">{t}</h3>
-            <p className="text-sm text-gray-600">{d}</p>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        {[
+          { label: 'My Listings', value: myListings.length, icon: <HiShoppingBag className="text-xl" />, color: 'bg-blue-50 text-blue-600', link: '#listings' },
+          { label: 'Total Swaps', value: mySwaps.length, icon: <HiSwitchHorizontal className="text-xl" />, color: 'bg-purple-50 text-purple-600', link: '/swaps' },
+          { label: 'Pending', value: pendingSwaps.length, icon: <HiClipboardList className="text-xl" />, color: 'bg-yellow-50 text-yellow-600', link: '/swaps' },
+          { label: 'Conversations', value: chatPartners.length, icon: <HiChat className="text-xl" />, color: 'bg-green-50 text-green-600', link: '/chat' },
+        ].map(stat => (
+          <Link key={stat.label} to={stat.link} className="card p-4 hover:shadow-md transition-shadow">
+            <div className={`w-10 h-10 ${stat.color} rounded-xl flex items-center justify-center mb-3`}>{stat.icon}</div>
+            <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+            <p className="text-sm text-gray-500">{stat.label}</p>
           </Link>
         ))}
+      </div>
+
+      <div className="grid lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-6">
+          {/* Pending Swap Requests */}
+          {pendingSwaps.length > 0 && (
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <HiClipboardList className="text-yellow-500" /> Pending Swap Requests
+              </h2>
+              <div className="space-y-4">
+                {pendingSwaps.map(swap => <SwapCard key={swap.id} swap={swap} />)}
+              </div>
+            </div>
+          )}
+
+          {/* My Listings */}
+          <div id="listings">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <HiShoppingBag className="text-blue-500" /> My Listings
+              </h2>
+              <Link to="/marketplace" className="text-sm text-primary-600 hover:text-primary-700 font-medium">Browse Marketplace</Link>
+            </div>
+            {myListings.length === 0 ? (
+              <div className="card p-10 text-center">
+                <HiShoppingBag className="text-4xl text-gray-300 mx-auto mb-3" />
+                <p className="text-gray-500 mb-3">You haven't listed any items yet</p>
+                <Link to="/listing/new" className="btn-primary">Create Your First Listing</Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {myListings.slice(0, 6).map(item => <ClothingCard key={item.id} listing={item} />)}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          {/* Location Matcher */}
+          <LocationMatcher />
+
+          {/* Recent Activity */}
+          <div className="card p-5">
+            <h3 className="font-semibold text-gray-900 mb-4">Quick Links</h3>
+            <div className="space-y-2">
+              <Link to="/swaps" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                <HiSwitchHorizontal className="text-primary-500" />
+                <span className="text-sm text-gray-700">View All Swaps</span>
+              </Link>
+              <Link to="/chat" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                <HiChat className="text-green-500" />
+                <span className="text-sm text-gray-700">Messages</span>
+              </Link>
+              <Link to="/value-calculator" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                <span className="text-primary-500 font-bold text-sm">$</span>
+                <span className="text-sm text-gray-700">Value Calculator</span>
+              </Link>
+              <Link to="/profile" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                <span className="text-purple-500">&#9733;</span>
+                <span className="text-sm text-gray-700">Edit Profile</span>
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

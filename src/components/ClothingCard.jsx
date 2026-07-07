@@ -1,42 +1,104 @@
 import { Link } from 'react-router-dom';
+import { useApp } from '../context/AppContext';
+import { HiLocationMarker, HiHeart, HiStar } from 'react-icons/hi';
+import { useState } from 'react';
 
-export default function ClothingCard({ item }) {
+export default function ClothingCard({ listing }) {
+  const { getUser } = useApp();
+  const owner = getUser(listing.userId);
+  const [liked, setLiked] = useState(false);
+
+  // Generate a fake rating based on condition and value
+  const rating = Math.min(5, Math.max(3, Math.round((listing.estimatedValue / 20) + (listing.condition === 'New' ? 1 : listing.condition === 'Like New' ? 0.5 : 0)))).toFixed(1);
+  const ratingCount = Math.floor(listing.estimatedValue * 2.5) + 120;
+
   return (
-    <Link to={`/clothing/${item.id}`} className="card hover:shadow-lg transition-shadow group">
-      <div className="aspect-square bg-gray-100 overflow-hidden relative">
-        {item.image_url ? (
-          <img src={item.image_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
-        ) : null}
-        <div className={`w-full h-full flex flex-col items-center justify-center text-gray-400 ${item.image_url ? 'absolute inset-0 hidden' : ''}`} style={{ background: 'linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%)' }}>
-          <svg className="w-16 h-16 text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-          </svg>
-          <span className="text-xs font-medium text-gray-400">{item.type || 'Clothing'}</span>
+    <div className="product-card group">
+      <Link to={`/item/${listing.id}`} className="block">
+        {/* Image */}
+        <div className="product-img-wrap aspect-square relative">
+          <img
+            src={listing.images[0]}
+            alt={listing.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=400&h=400&fit=crop'; }}
+          />
+          {!listing.available && (
+            <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+              <span className="bg-white text-gray-900 font-bold px-4 py-2 text-sm">UNAVAILABLE</span>
+            </div>
+          )}
+          {/* Wishlist button */}
+          <button
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setLiked(!liked); }}
+            className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors"
+          >
+            <HiHeart className={`text-lg ${liked ? 'text-red-500 fill-red-500' : 'text-gray-400'}`} />
+          </button>
         </div>
-      </div>
-      <div className="p-4">
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="font-semibold text-gray-900 line-clamp-2">{item.title}</h3>
-          {item.status && item.status !== 'available' && (
-            <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full whitespace-nowrap">{item.status}</span>
+
+        {/* Content */}
+        <div className="p-3">
+          {/* Title */}
+          <h3 className="text-sm font-medium text-gray-900 line-clamp-2 group-hover:text-accent-600 transition-colors mb-1">
+            {listing.title}
+          </h3>
+
+          {/* Brand */}
+          <p className="text-xs text-gray-500 mb-1.5">{listing.brand}</p>
+
+          {/* Rating */}
+          <div className="flex items-center gap-1.5 mb-2">
+            <span className="rating-badge">
+              {rating} <HiStar className="text-xs" />
+            </span>
+            <span className="text-xs text-gray-500">({ratingCount})</span>
+          </div>
+
+          {/* Price / Swap Value */}
+          <div className="flex items-baseline gap-2 mb-2">
+            <span className="price-tag">{listing.estimatedValue} pts</span>
+            <span className="text-xs text-success-600 font-medium">Free Swap</span>
+          </div>
+
+          {/* Condition Badge */}
+          <div className="flex items-center gap-1.5 mb-2">
+            <span className={`text-xs font-medium px-1.5 py-0.5 rounded-sm ${
+              listing.condition === 'New' ? 'bg-green-50 text-green-700' :
+              listing.condition === 'Like New' ? 'bg-blue-50 text-blue-700' :
+              listing.condition === 'Excellent' ? 'bg-purple-50 text-purple-700' :
+              'bg-yellow-50 text-yellow-700'
+            }`}>
+              {listing.condition}
+            </span>
+            <span className="text-xs text-gray-500">Size {listing.size}</span>
+          </div>
+
+          {/* Location */}
+          <div className="flex items-center gap-1 text-xs text-gray-500">
+            <HiLocationMarker className="text-sm" />
+            <span className="truncate">{listing.location}</span>
+          </div>
+
+          {/* Seller Info */}
+          {owner && (
+            <div className="mt-2 pt-2 border-t border-gray-100">
+              <p className="text-xs text-gray-600">
+                Sold by: <span className="font-medium text-gray-900">{owner.name}</span>
+              </p>
+            </div>
           )}
         </div>
-        <div className="text-lg font-bold text-primary-600 mb-1">₹{item.estimated_value}</div>
-        <div className="text-sm text-gray-600 space-y-0.5">
-          <div>{item.brand} · {item.size}</div>
-          <div className="flex items-center gap-1 text-gray-500">
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            {item.location || item.owner_location}
-          </div>
+      </Link>
+
+      {/* Swap Button */}
+      {listing.available && (
+        <div className="px-3 pb-3">
+          <Link to={`/item/${listing.id}`} className="btn-swap w-full text-center block">
+            Request Swap
+          </Link>
         </div>
-        <div className="mt-2 flex items-center gap-2">
-          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{item.condition}</span>
-          <span className="text-xs bg-primary-50 text-primary-700 px-2 py-0.5 rounded">{item.type}</span>
-        </div>
-      </div>
-    </Link>
+      )}
+    </div>
   );
 }
