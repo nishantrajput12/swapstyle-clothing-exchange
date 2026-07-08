@@ -1,28 +1,187 @@
 // SwapStyle seed data — 10 users + admin, 140 realistic listings across 14 categories.
 
-export const CLOTHING_IMAGES = [
-  'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1544441893-675973e31985?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1434389677669-e08b4cead0e2?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1495105787522-656c8c9f8a7d?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=400&fit=crop',
-];
+// Category-specific image pools — every listing in a category shows a photo that ACTUALLY matches.
+// Each URL points to a real Unsplash photo of that clothing type.
+export const CATEGORY_IMAGES = {
+  'Tops': [
+    'https://images.unsplash.com/photo-1564257577-2d3c9c8e0b8a?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1591369822096-ffd140ec948f?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1554568218-0f1715e72254?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1583496661160-fb5886a13d44?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1602573991155-21f0143bb45c?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1520006403909-838d6b92c22e?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1551163943-3f7fb896e0f5?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1582142306909-195724d33ffc?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1548624313-0396c75e7d55?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&h=400&fit=crop',
+  ],
+  'T-Shirts': [
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1622445275463-afa2ab738c34?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1527719327859-c6ce80353573?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=400&h=400&fit=crop',
+  ],
+  'Shirts': [
+    'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1563630423918-b58f07336ac9?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1589310243389-96a5483213a8?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1626497764746-6dc36546b388?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=400&fit=crop',
+  ],
+  'Dresses': [
+    'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1583846783214-7229a91b20ed?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1568252542512-9fe8fe9c87bb?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1550639525-c97d455acf70?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1596939123454-a30d84f96a20?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1571513800374-df1bbe650e56?w=400&h=400&fit=crop',
+  ],
+  'Jeans': [
+    'https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1604176354204-9268737828e4?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1582552938357-32b906df40cb?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1475178626620-a4d074967452?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1584370848010-d7fe6bc767ec?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1548883354-94bcfe321cbb?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1582418702059-97ebd0ac4577?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&h=400&fit=crop',
+  ],
+  'Pants': [
+    'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1473966968600-fa801b3f3ef1?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1517438322307-e67111335449?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1584865288642-42078afe6942?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1584865288642-42078afe6942?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1580906855764-ada0e50ac2b9?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=400&fit=crop',
+  ],
+  'Skirts': [
+    'https://images.unsplash.com/photo-1577900232427-18219b9166a0?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1583496661160-fb5886a13d44?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1573878415827-5e068b0c81b1?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1618354691551-44de113f0164?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1551803091-e20673f15770?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=400&h=400&fit=crop',
+  ],
+  'Jackets': [
+    'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1548126032-079a0fb0099d?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1520975916090-3105956dac38?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1543076447-215ad9ba6923?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1591047139756-eb1cf6c9b8a9?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1520975954732-35dd22299614?w=400&h=400&fit=crop',
+  ],
+  'Blazers': [
+    'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1617137968427-85924c800a22?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1621072156002-e2fccdc0b176?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1580657018950-c7f7d6a6d990?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1598808503746-f34c53b9323e?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1602810316693-3667c854239a?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1553143820-c67d015c9a09?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=400&fit=crop',
+  ],
+  'Hoodies': [
+    'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1614495039606-3d0f6bf40a13?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1578681994506-b8f463449011?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1618354691229-88d47f285158?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1512327605777-2c1613efe543?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1620006991974-b7ac59902b64?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1565693413579-8a218e30ecb6?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=400&h=400&fit=crop',
+  ],
+  'Sweaters': [
+    'https://images.unsplash.com/photo-1434389677669-e08b4cead0e2?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1548624313-0396c75e7d55?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1608063615781-e2ef8c9d3f7f?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1616258867891-c69b40a2b3c5?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1520975954732-35dd22299614?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&h=400&fit=crop',
+  ],
+  'Ethnic Wear': [
+    'https://images.unsplash.com/photo-1610030006874-31ed9d8f8f9c?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1594736797933-d0a9ba1fe4c1?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1583391733956-3ae8c0b6d3fb?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1610030006870-4d4f5d3d19bc?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1610030181087-540017dc9d61?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1600950207944-0d63e8edbc3f?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1588625500633-a0cd518f0f60?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1583391733849-4ae7c2f92da3?w=400&h=400&fit=crop',
+  ],
+  'Shoes': [
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1600269452121-4f2416e55c28?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1520639888713-7851133b1ed0?w=400&h=400&fit=crop',
+  ],
+  'Accessories': [
+    'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1509941943102-10c232535736?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1622434641406-a158123450f9?w=400&h=400&fit=crop',
+  ],
+};
+
+// Flat list kept for backwards compatibility with any importer.
+export const CLOTHING_IMAGES = Object.values(CATEGORY_IMAGES).flat();
+
+// Pick category-appropriate image based on listing index (i).
 const IMG = (i) => CLOTHING_IMAGES[i % CLOTHING_IMAGES.length];
+const catImg = (cat, i) => {
+  const pool = CATEGORY_IMAGES[cat] || CLOTHING_IMAGES;
+  return pool[i % pool.length];
+};
 
 export const SEED_USERS = [
   { id: 'u1', name: 'Priya Sharma', email: 'priya@example.com', password: 'password123', location: 'Mumbai, India', bio: 'Sustainable fashion enthusiast. Love swapping designer pieces!', isAdmin: false, joinDate: '2024-11-15', avatar: '' },
@@ -43,7 +202,7 @@ const USER_CITY = { u1: 'Mumbai, India', u2: 'Delhi, India', u3: 'Bangalore, Ind
 const mk = (id, u, t, cat, b, s, cond, v, d, i, tags, date) => ({
   id, userId: u, title: t, category: cat, brand: b, size: s, condition: cond,
   estimatedValue: v, description: d, location: USER_CITY[u],
-  images: [IMG(i)], tags, available: true, createdAt: date,
+  images: [catImg(cat, i)], tags, available: true, createdAt: date,
 });
 
 export const SEED_LISTINGS = [
@@ -234,7 +393,7 @@ export const SEED_MESSAGES = [
   { id: 'm7', senderId: 'u8', receiverId: 'u7', text: 'Thanks Ishaan! Let me think about it. What size are the Converse?', timestamp: '2025-01-22T18:00:00' },
 ];
 
-const SEED_VERSION = 'v2-140-items';
+const SEED_VERSION = 'v3-category-images';
 
 export function getSeedData() {
   const stored = localStorage.getItem('swapstyle_seed_version');
